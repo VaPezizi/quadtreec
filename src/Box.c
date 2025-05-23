@@ -12,7 +12,6 @@ int box_intersects(Box * fbox, Box * sbox){
 		get_right(sbox) < sbox->pos.x || 
 		fbox->pos.y > get_bottom(sbox) ||
 		get_bottom(fbox) < sbox->pos.y
-		
 		);
 }
 float get_bottom(Box * box){
