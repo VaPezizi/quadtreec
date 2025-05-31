@@ -18,6 +18,8 @@ int main(int argc, char**argv){
 	
 	int dir = 0; //Is box turning big or small
 
+	qtree * tree = create_tree(screenWidth, screenHeight, 4);
+
 	SetTargetFPS(60);
 
 	while(!WindowShouldClose()){
@@ -45,10 +47,12 @@ int main(int argc, char**argv){
 			DrawRectangle(20, 20, 20, 20, GREEN);
 		if(box_intersects(&box, &sbox))
 				DrawRectangle(50, 20, 20, 20, ORANGE);
+
+		draw_tree_bounds(tree);
 		EndDrawing();
 	}
 
-//	destroyTree(quadtree);
+	destroy_tree(tree);
 
 	CloseWindow();
 }

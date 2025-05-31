@@ -67,23 +67,29 @@ int add_element_i(qtree * qtree, qnode * currentNode, Vector2 point){
 	Vector2 currentHalfSize = (Vector2){ currentNode->size.x / 2.0f, currentNode->size.y / 2.0f};
 	Vector2 middlePoint = (Vector2) { currentNode->pos.x + currentHalfSize.x, currentNode->pos.y + currentHalfSize.y };
 
-	//If node is a leaf
-	if(!is_leaf(currentNode)){
 
-	}
+
+	//If node is a leaf AND fits more points
 	if(is_leaf(currentNode) && currentNode->count < qtree->treshold){
+		currentNode->count++;
+		currentNode->boxes = (Box*)realloc (currentNode->boxes, sizeof(Box)*(currentNode->count));
+		return 1;	
 
 		//If point should go to top left node	
-		if(point.x < middlePoint.x && point.y < middlePoint.y){
-			currentNode->first->count++;	
-			currentNode->first->boxes = realloc(currentNode->boxes, sizeof(struct point*)*(currentNode->count+1));
+		/*if(point.x < middlePoint.x && point.y < middlePoint.y){
+			currentNode->first->count++;				//Note, we first increase count and THEN allocate 	
+			currentNode->first->boxes = (Box*)realloc(currentNode->boxes, sizeof(Box)*(currentNode->count));
 			return 1;
 		}
+		//top right
+		if(point.x > middlePoint.x && point.y < middlePoint.y){
+			currentNode->first->count++;
+			
+		}*/
 		
 	}	
 	else{	//If point can be added to node	
 		subdivide(qtree, currentNode);
-		
 	}
 
 	return 1;
@@ -122,9 +128,10 @@ void destroy_tree_i(qnode * node){
 	}
 	free(node);
 }
-void destroyTree(qtree * qtree){
+void destroy_tree(qtree * qtree){
 	destroy_tree_i(qtree->rootnode);
 
 	free(qtree);
 	qtree = NULL;
+	fprintf(stdout, "Succesfully freed tree!\n");
 }

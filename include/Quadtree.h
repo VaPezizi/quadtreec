@@ -11,7 +11,7 @@ typedef struct qnode{
 	int count;	//Number of elements under node
 	Vector2 pos;	//Position of segment
 	Vector2 size;	//size of segment
-	Box ** boxes;	//List of elements
+	Box * boxes;	//List of elements
 	struct qnode *first;	//Top left Qnode
 	struct qnode *second;	//Top right Qnode
 	struct qnode *third;	//Bottom left Qnode
@@ -26,7 +26,7 @@ typedef struct qtree{
 	qnode * qnode_new(Vector2 pos, Vector2 size);
 	int is_leaf(qnode* node);
 	void subdivide(qtree * tree, qnode * node);
-	qtree * create_tree(int size_x, int size_y, int threshold);
+	qtree * create_tree(int size_x, int size_y, int threshold);	//Size of screen
 	int add_element_i(qtree * qtree, qnode * currentNode, Vector2 point);
 	int add_element(qtree * qtree, Vector2 point);
 	void draw_tree_bounds_i(qnode * node);
