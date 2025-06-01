@@ -4,8 +4,6 @@
 #include <memory.h>
 
 
-
-
 //Makes a  new qnode and returns pointer
 qnode * qnode_new(Vector2 pos, Vector2 size){
 	qnode * node = (qnode*)malloc(sizeof(qnode));
@@ -44,7 +42,7 @@ qtree * create_tree(int sizeX, int sizeY, int treshold){
 	}
 	qtreeptr->rootnode = (qnode*) malloc(sizeof(qnode));
 	if(!qtreeptr->rootnode){
-		fprintf(stderr, "ERROR in allocation of QNode!\n");
+		fprintf(stderr, "ERROR in allocation of rootnode!\n");
 		exit(1);
 	}	
 	
@@ -61,18 +59,34 @@ qtree * create_tree(int sizeX, int sizeY, int treshold){
 
 	return qtreeptr;
 }
-
+//TODO Muokkaa tää ottamaan laatikoita
 int add_element_i(qtree * qtree, qnode * currentNode, Vector2 point){
 
 	Vector2 currentHalfSize = (Vector2){ currentNode->size.x / 2.0f, currentNode->size.y / 2.0f};
 	Vector2 middlePoint = (Vector2) { currentNode->pos.x + currentHalfSize.x, currentNode->pos.y + currentHalfSize.y };
-
-
+	
+	//Recursively find node for point
+	if(!is_leaf(currentNode)){
+		if(point.x < middlePoint.x){	//If point is on left side
+			if(point.y < middlePoint.y)	//Top left
+				add_element_i(qtree, currentNode->first, point);
+			else				//Bottom left
+				add_element_i(qtree, currentNode->third, point);
+		}else{
+			if(point.y < middlePoint.y)
+				add_element_i(qtree, currentNode->second, point);
+			else
+				add_element_i(qtree, currentNode->fourth, point);	
+		}	
+		return 1;
+	}
 
 	//If node is a leaf AND fits more points
-	if(is_leaf(currentNode) && currentNode->count < qtree->treshold){
+	if(currentNode->count < qtree->treshold){
 		currentNode->count++;
 		currentNode->boxes = (Box*)realloc (currentNode->boxes, sizeof(Box)*(currentNode->count));
+		//currentNode->boxes[count - 1] =	//TODO Do this after changing Vector2 point to Box 
+		//puts("MOROROO");
 		return 1;	
 
 		//If point should go to top left node	
